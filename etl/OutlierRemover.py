@@ -37,7 +37,7 @@ class OutlierRemover:
 			elif isinstance(X, np.ndarray):
 				return OutlierRemover._numpy_no_y(X, threshold)
 			else:
-				raise ValueError(f"Unsupported data type. Expected polars.DataFrame, pandas.DataFrame or numpy.ndarray twice, instead got {type(X)} and {type(y)}")
+				raise ValueError(f"Unsupported data type. Expected polars.DataFrame, pandas.DataFrame or numpy.ndarray, instead got {type(X)}")
 		else:
 			if isinstance(X, pl.DataFrame) and isinstance(y, pl.DataFrame):
 				return OutlierRemover._polars(X, y, threshold)
@@ -48,7 +48,7 @@ class OutlierRemover:
 			elif isinstance(X, np.ndarray) and isinstance(y, np.ndarray):
 				return OutlierRemover._numpy(X, y, threshold)
 			else:
-				raise ValueError(f"Unsupported data type. Expected polars.DataFrame, pandas.DataFrame or numpy.ndarray, instead got {type(X)}")
+				raise ValueError(f"Unsupported data type. Expected polars.DataFrame, pandas.DataFrame or numpy.ndarray twice, instead got {type(X)} and {type(y)}")
 			
 	@staticmethod
 	def _polars(X: pl.DataFrame, y: pl.DataFrame, threshold):
