@@ -12,15 +12,17 @@ class OutlierRemover:
 	def remove_outliers(
 		X: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray,
 		y: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray = None,
+		target_y_count: int = 1,
 		threshold: float = 3.0
 	) -> Tuple[pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray, \
 			Optional[pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray]]:
 		"""
-		Removes outliers based on Z-score.
+		Removes outliers based on Z-score. NOT meant to be part of a pipeline, but applied to the data beforehand.
 
 		Args:
 			X: Input features (polars.DataFrame, polars.LazyFrame, pandas.DataFrame or numpy.ndarray).
 			y: Optional target values (polars.DataFrame, polars.LazyFrame, pandas.DataFrame or numpy.ndarray).
+			target_y_count: Last n columns of X are considered the target. Ignored if y is provided.
 			If not provided, last column is assumed to be the target. X and y must be of the same type.
 			threshold: Z-score threshold for identifying outliers.
 
@@ -29,13 +31,13 @@ class OutlierRemover:
 		"""
 		if y is None:
 			if isinstance(X, pl.DataFrame):
-				return OutlierRemover._polars_no_y(X, threshold)
+				return OutlierRemover._polars_no_y(X, target_y_count, threshold)
 			elif isinstance(X, pl.LazyFrame):
-				return OutlierRemover._polars_lazy_no_y(X, threshold)
+				return OutlierRemover._polars_lazy_no_y(X, target_y_count, threshold)
 			elif isinstance(X, pd.DataFrame):
-				return OutlierRemover._pandas_no_y(X, threshold)
+				return OutlierRemover._pandas_no_y(X, target_y_count, threshold)
 			elif isinstance(X, np.ndarray):
-				return OutlierRemover._numpy_no_y(X, threshold)
+				return OutlierRemover._numpy_no_y(X, target_y_count, threshold)
 			else:
 				raise ValueError(f"Unsupported data type. Expected polars.DataFrame, pandas.DataFrame or numpy.ndarray, instead got {type(X)}")
 		else:
@@ -122,10 +124,10 @@ class OutlierRemover:
 		return X_filtered, y_filtered
 
 	@staticmethod
-	def _polars_no_y(X: pl.DataFrame, threshold: float)-> pl.DataFrame:
+	def _polars_no_y(X: pl.DataFrame, target_y_count: int, threshold: float)-> pl.DataFrame:
 		zscores = np.abs(
 			st.zscore(
-				X.select(pl.exclude(X.columns[-1])).to_numpy(),
+				X.select(pl.exclude(X.columns[-target_y_count:])).to_numpy(),
 				axis=0,
 				nan_policy="omit"
 			)
@@ -137,21 +139,22 @@ class OutlierRemover:
 		)
 
 	@staticmethod
-	def _polars_lazy_no_y(X: pl.LazyFrame, threshold: float)-> pl.LazyFrame:
+	def _polars_lazy_no_y(X: pl.LazyFrame, target_y_count: int, threshold: float)-> pl.LazyFrame:
 		return OutlierRemover._polars_no_y(
 			X.collect(),
+			target_y_count,
 			threshold
 		).lazy()
 
 	@staticmethod
-	def _pandas_no_y(X: pd.DataFrame, threshold: float)-> pd.DataFrame:
-		return OutlierRemover._polars_no_y(pl.from_pandas(X), threshold).to_pandas()
+	def _pandas_no_y(X: pd.DataFrame, target_y_count: int, threshold: float)-> pd.DataFrame:
+		return OutlierRemover._polars_no_y(pl.from_pandas(X), target_y_count, threshold).to_pandas()
 
 	@staticmethod
-	def _numpy_no_y(X, threshold: float)-> np.ndarray:
+	def _numpy_no_y(X: np.ndarray, target_y_count: int, threshold: float)-> np.ndarray:
 		zscores: np.ndarray = np.abs(
 			st.zscore(
-				X[:, :-1],
+				X[:, :-target_y_count],
 				axis=0,
 				nan_policy="omit"
 			)
