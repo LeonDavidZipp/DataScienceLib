@@ -3,3 +3,8 @@ polars
 pandas
 pyarrow
 scipy
+matplotlib
+seaborn
+ipykernel
+jupyter
+notebook
