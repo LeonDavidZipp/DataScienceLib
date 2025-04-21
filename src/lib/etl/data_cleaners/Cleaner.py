@@ -1,7 +1,7 @@
 import polars as pl
 import polars.selectors as cs
 from typing import List
-from helpers.Renamer import Renamer
+from src.lib.helpers.Renamer import Renamer
 from abc import abstractmethod
 
 
@@ -277,44 +277,3 @@ class Cleaner:
 			return lf.sort(by=cols, descending=descending)
 		except Exception as e:
 			raise ValueError(f"Error sorting columns: {e}")
-
-	# def cast_to_categorical(self, lf: pl.LazyFrame, cols: str | List[str]) -> pl.LazyFrame:
-	# 	"""
-	# 	Turns all possible string columns into categoricals.
-
-	# 	Args:
-	# 		lf (pl.LazyFrame): LazyFrame to modify
-	# 		cols (str | List[str]): columns to cast to categorical
-
-	# 	Returns:
-	# 		pl.LazyFrame: the modified LazyFrame
-	# 	"""
-
-	# 	try:
-	# 		cols = Cleaner.cols_from_provided_cols_(lf, cols)
-	# 		if cols is None:
-	# 			return lf
-
-	# 		return lf.with_columns(pl.col(cols).cast(pl.Categorical))
-	# 	except Exception as e:
-	# 		raise ValueError(f"Error converting columns to categorical: {e}")
-
-	# def cols_to_dummies(self, lf: pl.LazyFrame, cols: str | List[str]) -> pl.LazyFrame:
-	# 	"""
-	# 	Turns all possible string columns into dummies.
-	# 	Args:
-	# 		lf (pl.LazyFrame): LazyFrame to modify
-	# 		cols (str | List[str]): columns to dummify
-
-	# 	Returns:
-	# 		pl.LazyFrame: the modified LazyFrame
-	# 	"""
-
-	# 	try:
-	# 		cols = Cleaner.cols_from_provided_cols_(lf, cols)
-	# 		if cols is None:
-	# 			return lf
-
-	# 		return lf.collect().to_dummies(cols).lazy()
-	# 	except Exception as e:
-	# 		raise ValueError(f"Error converting columns to dummies: {e}")

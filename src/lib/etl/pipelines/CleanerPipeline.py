@@ -2,6 +2,7 @@ import polars as pl
 from src.lib.etl.data_cleaners.Cleaner import Cleaner
 from src.lib.etl.pipelines.BaseETLPipeline import BaseETLPipeline, BaseDataSource
 
+
 class CleanerPipeline(BaseETLPipeline):
 	def __init__(
 		self,

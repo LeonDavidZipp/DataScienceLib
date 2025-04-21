@@ -3,7 +3,7 @@ import os
 import csv
 from abc import ABC, abstractmethod
 from typing import List, Tuple
-from helpers.Renamer import Renamer
+from src.lib.helpers.Renamer import Renamer
 
 
 class Reader(ABC):
