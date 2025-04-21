@@ -3,13 +3,14 @@ import polars.testing as pt
 import unittest
 from etl.Cleaner import Cleaner
 
+
 class TestCleaner(unittest.TestCase):
 	def setUp(self):
 		data = {
-			r"A%a": [1 , 2, None, 1, 10, -33],
+			r"A%a": [1, 2, None, 1, 10, -33],
 			"b)": ["a", None, None, "a", "b", "c"],
 			"c_": [3.2, 3.2, 2.3, 3.2, 1.0, 2.0],
-			"d": ["a", None, "d", "a", "b", None]
+			"d": ["a", None, "d", "a", "b", None],
 		}
 
 		self.cleaner = Cleaner()
@@ -24,7 +25,7 @@ class TestCleaner(unittest.TestCase):
 			tuple(list(self.cols) + ["e", "f"]): list(self.cols),
 			"b)": ["b)"],
 			None: [],
-			(): []
+			(): [],
 		}
 
 		for inp, expected in tests.items():
@@ -56,18 +57,15 @@ class TestCleaner(unittest.TestCase):
 
 		# Drop with None (should return the same LazyFrame)
 		result = self.cleaner.drop(self.lf, None)
-		self.assertEqual(result.collect_schema().names(), self.lf.collect_schema().names())
+		self.assertEqual(
+			result.collect_schema().names(), self.lf.collect_schema().names()
+		)
 
 	def test_remove_nulls(self):
 		"""
 		Test the remove_nulls method of the Cleaner class.
 		"""
-		tests = {
-			0.0: 6,
-			None: 6,
-			0.51: 4,
-			1.0: 3
-		}
+		tests = {0.0: 6, None: 6, 0.51: 4, 1.0: 3}
 		for threshold, expected in tests.items():
 			result = self.cleaner.remove_nulls(self.lf, non_null_threshold=threshold)
 			self.assertEqual(result.collect().shape[0], expected)
@@ -87,7 +85,9 @@ class TestCleaner(unittest.TestCase):
 		# Fill nulls with a constant value
 		result = self.cleaner.fill_nulls(self.lf)
 		print(result.null_count().collect())
-		self.assertEqual(result.null_count().collect().sum_horizontal().item(), 0)  # No nulls should remain
+		self.assertEqual(
+			result.null_count().collect().sum_horizontal().item(), 0
+		)  # No nulls should remain
 
 	def test_sort(self):
 		"""
@@ -95,7 +95,9 @@ class TestCleaner(unittest.TestCase):
 		"""
 
 		result = self.cleaner.sort(self.lf, cols=None, descending=False)
-		pt.assert_frame_equal(result, self.lf.sort(by=self.lf.collect_schema().names(), descending=False))
+		pt.assert_frame_equal(
+			result, self.lf.sort(by=self.lf.collect_schema().names(), descending=False)
+		)
 
 		result = self.cleaner.sort(self.lf, cols="A%a", descending=False)
 		pt.assert_frame_equal(result, self.lf.sort(by=["A%a"], descending=False))
@@ -105,4 +107,3 @@ class TestCleaner(unittest.TestCase):
 
 		result = self.cleaner.sort(self.lf, cols=["d", "A%a"], descending=False)
 		pt.assert_frame_equal(result, self.lf.sort(by=["d", "A%a"], descending=False))
-

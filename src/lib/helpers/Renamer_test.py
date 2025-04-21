@@ -1,6 +1,7 @@
 import unittest
 from helpers.Renamer import Renamer
 
+
 class TestRenamer(unittest.TestCase):
 	def setUp(self):
 		self.renamer = Renamer()
@@ -22,7 +23,10 @@ class TestRenamer(unittest.TestCase):
 		Test renaming with spaces
 		"""
 		self.assertEqual(self.renamer.rename("hello world"), "hello_world")
-		self.assertEqual(self.renamer.rename("  leading and trailing spaces  "), "leading_and_trailing_spaces")
+		self.assertEqual(
+			self.renamer.rename("  leading and trailing spaces  "),
+			"leading_and_trailing_spaces",
+		)
 
 	def test_rename_duplicates(self):
 		"""
@@ -44,8 +48,7 @@ class TestRenamer(unittest.TestCase):
 		"""
 		src = "!@#$%^&*()"
 		expected = f"{self.chars['!']}{self.chars['@']}{self.chars['#']}{self.chars['$']}{self.chars['%']}{self.chars['^']}{self.chars['&']}{self.chars['*']}{self.chars['(']}{self.chars[')']}"
-		self.assertEqual(
-			self.renamer.rename(src), expected)
+		self.assertEqual(self.renamer.rename(src), expected)
 
 	def test_rename_strip_underscores(self):
 		"""
@@ -65,6 +68,7 @@ class TestRenamer(unittest.TestCase):
 		Test renaming None
 		"""
 		self.assertEqual(self.renamer.rename(None), "unnamed")
+
 
 if __name__ == "__main__":
 	unittest.main()

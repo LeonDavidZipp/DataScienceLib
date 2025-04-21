@@ -2,9 +2,11 @@ import polars as pl
 from abc import ABC, abstractmethod
 from etl.Cleaner import Cleaner
 
+
 class BaseDataSource(ABC):
 	def __init__(self):
 		pass
+
 
 class BaseETLPipeline(ABC):
 	def __init__(self):
@@ -36,40 +38,41 @@ class BaseETLPipeline(ABC):
 		lf = self.transform(lf)
 		self.load(lf)
 
+
 class CleanerPipeline(BaseETLPipeline):
 	def __init__(
-			self,
-			non_null_threshold: float = 0.0,
-			descending: bool = False,
-			str_fill_val: str | None = "unknown",
-			str_fill_strat: str | None = None,
-			cat_fill_val: pl.Categorical | None = pl.lit("unknown", dtype=pl.Categorical),
-			cat_fill_strat: str | None = None,
-			num_fill_val: int | float | None = None,
-			num_fill_strat: str | None = "mean",
-			datetime_fill_val: pl.Date | pl.Datetime | None = None ,
-			datetime_fill_strat: str | None = "backward",
-			time_fill_val: pl.Time | None = None,
-			time_fill_strat: str | None = "mean",
-			bool_fill_val: bool | None = False,
-			bool_fill_strat: str | None = None,
-		):
+		self,
+		non_null_threshold: float = 0.0,
+		descending: bool = False,
+		str_fill_val: str | None = "unknown",
+		str_fill_strat: str | None = None,
+		cat_fill_val: pl.Categorical | None = pl.lit("unknown", dtype=pl.Categorical),
+		cat_fill_strat: str | None = None,
+		num_fill_val: int | float | None = None,
+		num_fill_strat: str | None = "mean",
+		datetime_fill_val: pl.Date | pl.Datetime | None = None,
+		datetime_fill_strat: str | None = "backward",
+		time_fill_val: pl.Time | None = None,
+		time_fill_strat: str | None = "mean",
+		bool_fill_val: bool | None = False,
+		bool_fill_strat: str | None = None,
+	):
 		"""
 		Args:
-			non_null_threshold (float): The threshold for non-null values to keep a column.
-			descending (bool): Whether to sort the DataFrame in descending order.
-			str_fill_val (str | None): The value to fill for string columns.
-			str_fill_strat (str | None): The strategy for filling string columns.
-			cat_fill_val (pl.Categorical | None): The value to fill for categorical columns.
-			cat_fill_strat (str | None): The strategy for filling categorical columns.
-			num_fill_val (int | float | None): The value to fill for numeric columns.
-			num_fill_strat (str | None): The strategy for filling numeric columns.
-			datetime_fill_val (pl.Date | pl.Datetime | None): The value to fill for datetime columns.
-			datetime_fill_strat (str | None): The strategy for filling datetime columns.
-			time_fill_val (pl.Time | None): The value to fill for time columns.
-			time_fill_strat (str | None): The strategy for filling time columns.
-			bool_fill_val (bool | None): The value to fill for boolean columns.
-			bool_fill_strat (str | None): The strategy for filling boolean columns.
+		        non_null_threshold (float): The threshold for non-null values to keep a column.
+		        descending (bool): Whether to sort the DataFrame in descending order.
+		        str_fill_val (str | None): The value to fill for string columns.
+		        str_fill_strat (str | None): The strategy for filling string columns.
+		        cat_fill_val (pl.Categorical | None): The value to fill for categorical columns.
+		        cat_fill_strat (str | None): The strategy for filling categorical columns.
+		        num_fill_val (int | float | None): The value to fill for numeric columns.
+		        num_fill_strat (str | None): The strategy for filling numeric columns.
+		        datetime_fill_val (pl.Date | pl.Datetime | None): The value to fill for datetime columns.
+		        datetime_fill_strat (str | None): The strategy for filling datetime columns.
+		        time_fill_val (pl.Time | None): The value to fill for time columns.
+		        time_fill_strat (str | None): The strategy for filling time columns.
+		        bool_fill_val (bool | None): The value to fill for boolean columns.
+		        bool_fill_strat (str | None): The strategy for filling boolean columns.
 		"""
 
 		super().__init__()
@@ -111,6 +114,6 @@ class CleanerPipeline(BaseETLPipeline):
 			self.bool_fill_strat,
 		)
 		return Cleaner.sort(lf, self.descending)
-	
+
 	def load_(self, lf: pl.LazyFrame):
 		return super().load_(lf)

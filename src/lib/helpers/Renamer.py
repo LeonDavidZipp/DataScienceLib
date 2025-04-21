@@ -1,15 +1,17 @@
 from functools import lru_cache
 from typing import Dict
 
+
 class Renamer:
 	"""
 	Class for renaming columns to valid python variable names.
 	Also handles duplicate names by appending a number to the end of the name.
 	"""
+
 	def __init__(self, rename_dict: Dict[str, str] | None = None):
 		default_rename_dict = {
 			"!": "",
-			"\"": "",
+			'"': "",
 			"#": "number",
 			"$": "dollar",
 			"%": "percent",
@@ -39,7 +41,7 @@ class Renamer:
 			"{": "_",
 			"|": "pipe",
 			"}": "_",
-			"~": "tilde"
+			"~": "tilde",
 		}
 		self.rename_dict = default_rename_dict if rename_dict is None else rename_dict
 		self.counts = dict()
@@ -50,9 +52,9 @@ class Renamer:
 		characters and replacing spaces with underscores.
 
 		Args:
-			name (str): the name to rename
+		        name (str): the name to rename
 		Returns:
-			str: the renamed name
+		        str: the renamed name
 		"""
 		name = self.rename_inner_(name)
 		if self.counts.get(name) is None:

@@ -5,21 +5,26 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 from helpers.Renamer import Renamer
 
+
 class Reader(ABC):
 	def __init__(self, path: str, schema: List[Tuple[str, str]] = None):
 		"""
 		Initializes the Reader class with the given path.
 
 		Args:
-			path (str): The path to the data file.
-			schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
+		        path (str): The path to the data file.
+		        schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
 		"""
 
 		rn = Renamer()
 		names = [rn.rename(str(name)) for name, _ in schema] if schema else None
 		dtypes = [dtype for _, dtype in schema] if schema else None
 
-		self.schema = [(name, dtype) for name, dtype in zip(names, dtypes)] if names and dtypes else None
+		self.schema = (
+			[(name, dtype) for name, dtype in zip(names, dtypes)]
+			if names and dtypes
+			else None
+		)
 		self.path = path
 
 	def read(self) -> pl.LazyFrame:
@@ -27,10 +32,10 @@ class Reader(ABC):
 		Reads data from the given path and returns it as a list of dictionaries.
 
 		Args:
-			path (str): The path to the data file.
+		        path (str): The path to the data file.
 
 		Returns:
-			pl.LazyFrame: A lazy frame containing the data read from the file.
+		        pl.LazyFrame: A lazy frame containing the data read from the file.
 		"""
 
 		if not os.path.exists(self.path):
@@ -47,10 +52,10 @@ class Reader(ABC):
 		Reads data from the given path and returns it as a list of dictionaries.
 
 		Args:
-			path (str): The path to the data file.
+		        path (str): The path to the data file.
 
 		Returns:
-			pl.LazyFrame: A lazy frame containing the data read from the file.
+		        pl.LazyFrame: A lazy frame containing the data read from the file.
 		"""
 
 		raise NotImplementedError("Subclasses must implement this method")
@@ -61,8 +66,8 @@ class CSVReader(Reader):
 		"""
 		Initializes the CSVReader class with the given path.
 		Args:
-			path (str): The path to the CSV file.
-			schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
+		        path (str): The path to the CSV file.
+		        schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
 		"""
 		super().__init__(path, schema)
 
@@ -71,14 +76,14 @@ class CSVReader(Reader):
 		Reads data from a CSV file and returns it as a lazy frame.
 
 		Args:
-			path (str): The path to the CSV file.
+		        path (str): The path to the CSV file.
 
 		Returns:
-			pl.LazyFrame: A lazy frame containing the data read from the CSV file.
+		        pl.LazyFrame: A lazy frame containing the data read from the CSV file.
 		"""
 		try:
 			# Detect delimiter and other dialect attributes
-			with open(self.path, 'r') as file:
+			with open(self.path, "r") as file:
 				for s in [1024, 2048, 4096]:
 					sample = file.read(s)
 					sniffer = csv.Sniffer()

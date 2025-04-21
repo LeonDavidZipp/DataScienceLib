@@ -5,6 +5,7 @@ import polars as pl
 import polars.testing as pl_testing
 from OutlierRemover import OutlierRemover
 
+
 class TestOutlierRemoverCorrectInputs(unittest.TestCase):
 	def test_remove_outliers_numpy(self):
 		# y of shape (3,)
@@ -88,6 +89,7 @@ class TestOutlierRemoverCorrectInputs(unittest.TestCase):
 		X_exp = pl.LazyFrame({"A": [1, 2, 4], "B": [5, 6, 4], "C": [3, 4, 6]})
 		self.assertIsInstance(X_pred, pl.LazyFrame)
 		pl_testing.assert_frame_equal(X_pred.collect(), X_exp.collect())
+
 
 class TestOutlierRemoverIncorrectInputs(unittest.TestCase):
 	def test_remove_outliers_incorrect_shape(self):

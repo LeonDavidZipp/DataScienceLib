@@ -5,30 +5,31 @@ import watchdog.events as ev
 import os
 
 import polars as pl
-import polars.selectors as cs
 import sqlalchemy
-from typing import Dict, List
+from typing import Dict
+
 
 class BaseETLPipeline:
 	def __init__(self):
 		pass
 
+
 class ETLHandler(ev.FileSystemEventHandler):
 	def __init__(
-			self,
-			engine: sqlalchemy.engine.Engine,
-			ending_to_schema_mapping: Dict[str, str] = None,
-			non_null_threshold: float | None = None,
-			null_fill_strategy: str | None = None,
-			descending: bool | None = None
-		):
+		self,
+		engine: sqlalchemy.engine.Engine,
+		ending_to_schema_mapping: Dict[str, str] = None,
+		non_null_threshold: float | None = None,
+		null_fill_strategy: str | None = None,
+		descending: bool | None = None,
+	):
 		"""
 		Args:
-			engine: the ALREADY CONNECTED engine to interact with the database
-			ending_to_schema__mapping: a dictionary mapping file endings to schema names
-			non_null_threshold: the threshold for non-null values
-			null_fill_strategy: the strategy for filling null values
-			descending: whether to sort in descending order
+		        engine: the ALREADY CONNECTED engine to interact with the database
+		        ending_to_schema__mapping: a dictionary mapping file endings to schema names
+		        non_null_threshold: the threshold for non-null values
+		        null_fill_strategy: the strategy for filling null values
+		        descending: whether to sort in descending order
 		"""
 		self.engine = engine
 		self.ending_to_schema_mapping = ending_to_schema_mapping
@@ -48,7 +49,9 @@ class ETLHandler(ev.FileSystemEventHandler):
 		lf = Cleaner.fill_nulls(lf, self.null_fill_strategy)
 		return Cleaner.sort(lf, self.descending)
 
-	def load(self, lf: pl.LazyFrame, table_name: str, schema_name: str = "public") -> None:
+	def load(
+		self, lf: pl.LazyFrame, table_name: str, schema_name: str = "public"
+	) -> None:
 		"""
 		Load the transformed data into the target system.
 		"""
@@ -58,7 +61,7 @@ class ETLHandler(ev.FileSystemEventHandler):
 			table_name=f"{schema_name}.{table_name}",
 			connection=self.engine,
 			engine="sqlalchemy",
-			if_table_exists="append"
+			if_table_exists="append",
 		)
 
 	def on_created(self, event: ev.DirCreatedEvent | ev.FileCreatedEvent):
@@ -67,7 +70,6 @@ class ETLHandler(ev.FileSystemEventHandler):
 		lf = self.extract(event.src_path)
 		lf = self.transform(lf)
 
-		
 
 class DirWatcher:
 	def __init__(self, path: str):
@@ -78,7 +80,7 @@ class DirWatcher:
 			event_handler=handler,
 			path=path,
 			recursive=True,
-			event_filter=[ev.FileCreatedEvent]
+			event_filter=[ev.FileCreatedEvent],
 		)
 
 	# def run

@@ -3,6 +3,7 @@ import numpy as np
 from basic_statistics.scores import Scores
 import scipy.stats
 
+
 class TestScores(unittest.TestCase):
 	def test_variance(self):
 		X = np.array([1, 2, 3, 4, 5])
@@ -17,7 +18,9 @@ class TestScores(unittest.TestCase):
 	def test_zscore(self):
 		X = np.array([1, 2, 3, 4, 5])
 		expected_zscores = scipy.stats.zscore(X, axis=0)  # Z-score formula
-		np.testing.assert_array_almost_equal(Scores.zscore(X), expected_zscores, decimal=5)
+		np.testing.assert_array_almost_equal(
+			Scores.zscore(X), expected_zscores, decimal=5
+		)
 
 	def test_variance_single_value(self):
 		X = np.array([5])
@@ -31,13 +34,18 @@ class TestScores(unittest.TestCase):
 
 	def test_zscore_single_value(self):
 		X = np.array([5])
-		expected_zscores = scipy.stats.zscore(X, axis=0)  # Z-score of a single value is undefined (division by 0)
+		expected_zscores = scipy.stats.zscore(
+			X, axis=0
+		)  # Z-score of a single value is undefined (division by 0)
 		np.testing.assert_array_equal(Scores.zscore(X), expected_zscores)
 
 	def test_zscore_empty_array(self):
 		X = np.array([])
-		expected_zscores = scipy.stats.zscore(X, axis=0)  # Z-score of an empty array should return an empty array
+		expected_zscores = scipy.stats.zscore(
+			X, axis=0
+		)  # Z-score of an empty array should return an empty array
 		np.testing.assert_array_equal(Scores.zscore(X), expected_zscores)
+
 
 if __name__ == "__main__":
 	unittest.main()
