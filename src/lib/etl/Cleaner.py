@@ -3,7 +3,7 @@ import polars.selectors as cs
 import numpy as np
 from typing import List
 from helpers.Renamer import Renamer
-from abc import abstractmethod, abstractstaticmethod
+from abc import abstractmethod
 
 class Cleaner:
 	"""
