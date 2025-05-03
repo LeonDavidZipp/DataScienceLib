@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Literal
+from typing import Literal, override
 import statsmodels
 import abc
 import sklearn.base as skbase

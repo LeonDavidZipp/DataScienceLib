@@ -26,7 +26,8 @@ class Extender:
 		"""
 
 		time_series = time_series.interpolate(method="linear")
-		return cast.ForeCaster(self.period, self.steps).fit_transform(time_series)
+		data = cast.ForeCaster(self.period, self.steps).fit_transform(time_series)
+		return pl.Series(data, nan_to_null=True)
 
 	def backward(self, time_series: pl.Series) -> pl.Series:
 		"""
@@ -42,4 +43,5 @@ class Extender:
 		"""
 
 		time_series = time_series.interpolate(method="linear")
-		return cast.BackCaster(self.period, self.steps).fit_transform(time_series)
+		data = cast.BackCaster(self.period, self.steps).fit_transform(time_series)
+		return pl.Series(data, nan_to_null=True)
