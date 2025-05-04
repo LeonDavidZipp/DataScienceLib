@@ -1,5 +1,5 @@
 import polars as pl
-from src.lib.etl.data_cleaners.Cleaner import Cleaner
+from src.lib.etl.cleaners.Cleaner import Cleaner
 from src.lib.etl.pipelines.BaseETLPipeline import BaseETLPipeline, BaseDataSource
 
 

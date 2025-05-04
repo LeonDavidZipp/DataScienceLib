@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import polars as pl
 import polars.testing as pl_testing
-from src.lib.etl.data_cleaners.OutlierRemover import OutlierRemover
+from src.lib.etl.outliers.OutlierRemover import OutlierRemover
 
 
 class TestOutlierRemoverCorrectInputs(unittest.TestCase):
