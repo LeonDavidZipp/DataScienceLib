@@ -1,8 +1,13 @@
 import numpy as np
 import sklearn as sk
 
+
 class ScalerNDim(sk.base.BaseEstimator, sk.base.TransformerMixin):
-	def __init__(self, divisor: int | float | None = None, prevent_div_by_zero_val: int | float = 0.01):
+	def __init__(
+		self,
+		divisor: int | float | None = None,
+		prevent_div_by_zero_val: int | float = 0.01,
+	):
 		if divisor is not None and divisor == 0:
 			raise ValueError("divisor cannot be 0")
 		self.divisor = divisor

@@ -1,6 +1,7 @@
 import numpy as np
 import sklearn as sk
 
+
 class TransposerNDim(sk.base.BaseEstimator, sk.base.TransformerMixin):
 	def __init__(self, transpose_dims: tuple):
 		self.transpose_dims = transpose_dims
