@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.lib.transformers.ScalerNDim import ScalerNDim
+from src.lib.transformers.scaling.ScalerNDim import ScalerNDim
 
 
 class TestScalerNDim(unittest.TestCase):

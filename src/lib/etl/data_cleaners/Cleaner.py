@@ -29,16 +29,17 @@ class Cleaner:
 		"""
 
 		try:
-			if isinstance(cols, str):
-				lf_cols = lf.collect_schema().names()
-				return [col for col in lf_cols if col == cols]
-			elif isinstance(cols, list):
-				lf_cols = lf.collect_schema().names()
-				return [col for col in cols if col in lf_cols]
-			elif cols is None:
-				return []
-			else:
-				raise ValueError("cols must be one of str, List[str], or None")
+			match cols:
+				case str():
+					lf_cols = lf.collect_schema().names()
+					return [col for col in lf_cols if col == cols]
+				case list():
+					lf_cols = lf.collect_schema().names()
+					return [col for col in cols if col in lf_cols]
+				case None:
+					return []
+				case _:
+					raise ValueError("cols must be one of str, List[str], or None")
 		except Exception as e:
 			raise ValueError(f"Error checking columns: {e}")
 
