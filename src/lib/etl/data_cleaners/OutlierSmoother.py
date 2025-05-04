@@ -15,13 +15,23 @@ class OutlierSmoother:
 	def smooth_col_(self, X: pl.Series) -> pl.Series:
 		max_val = X.mean() + self.max_zscore * X.std()
 		min_val = X.mean() - self.max_zscore * X.std()
-		return (
-			pl.when(X > max_val)
-			.then(max_val)
-			.when(X < min_val)
-			.then(min_val)
-			.otherwise(X)
+		if X.dtype.is_integer():
+			max_val = int(max_val)
+			min_val = int(min_val)
+		print(f"max_val: {max_val}, min_val: {min_val}")
+		res = (
+			pl.DataFrame(X)
+			.select(
+				pl.when(cs.by_name(X.name) > max_val)
+				.then(max_val)
+				.when(cs.by_name(X.name) < min_val)
+				.then(min_val)
+				.otherwise(cs.by_name(X.name))
+			)
+			.to_series()
 		)
+		print(f"res: {res.to_list()}")
+		return res
 
 	def smooth(self, X: pl.DataFrame) -> pl.DataFrame:
 		"""
