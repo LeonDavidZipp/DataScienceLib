@@ -2,8 +2,6 @@ import numpy as np
 import polars as pl
 import pandas as pd
 import scipy.stats as st
-from typing import Tuple, Optional
-from multipledispatch import dispatch
 
 
 class OutlierRemover:
@@ -13,12 +11,12 @@ class OutlierRemover:
 	@staticmethod
 	def remove_outliers(
 		X: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray,
-		y: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray = None,
+		y: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray| None = None,
 		y_count: int = 1,
 		threshold: float = 3.0,
-	) -> Tuple[
+	) -> tuple[
 		pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray,
-		Optional[pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray],
+		pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray | None,
 	]:
 		"""
 		Removes outliers based on Z-score. NOT meant to be part of a pipeline, but applied to the data beforehand.

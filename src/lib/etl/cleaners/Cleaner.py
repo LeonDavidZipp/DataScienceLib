@@ -1,6 +1,5 @@
 import polars as pl
 import polars.selectors as cs
-from typing import List
 from src.lib.helpers.Renamer import Renamer
 from abc import abstractmethod
 
@@ -15,14 +14,14 @@ class Cleaner:
 
 	@staticmethod
 	def cols_from_provided_cols_(
-		lf: pl.LazyFrame, cols: str | List[str] | None
-	) -> List[str]:
+		lf: pl.LazyFrame, cols: str | list[str] | None
+	) -> list[str]:
 		"""
 		Helper method filtering the provided columns to only include those that are in the LazyFrame
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to check columns of
-		        cols (str | List[str]): columns to check for in the LazyFrame
+		        cols (str | list[str]): columns to check for in the LazyFrame
 
 		Returns:
 		        list[str] | None: list of columns that are in the LazyFrame, or None if no columns were provided
@@ -39,7 +38,7 @@ class Cleaner:
 				case None:
 					return []
 				case _:
-					raise ValueError("cols must be one of str, List[str], or None")
+					raise ValueError("cols must be one of str, list[str], or None")
 		except Exception as e:
 			raise ValueError(f"Error checking columns: {e}")
 
@@ -62,13 +61,13 @@ class Cleaner:
 			raise ValueError(f"Error renaming columns: {e}")
 
 	@staticmethod
-	def drop(lf: pl.LazyFrame, cols: str | List[str] | None = None) -> pl.LazyFrame:
+	def drop(lf: pl.LazyFrame, cols: str | list[str] | None = None) -> pl.LazyFrame:
 		"""
 		Drops the given columns from the LazyFrame.
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to drop columns from
-		        cols (str | List[str]): columns to drop
+		        cols (str | list[str]): columns to drop
 
 		Returns:
 		        pl.LazyFrame: the modified LazyFrame
@@ -94,7 +93,7 @@ class Cleaner:
 	@staticmethod
 	def remove_nulls(
 		lf: pl.LazyFrame,
-		cols_to_ignore: str | List[str] | None = None,
+		cols_to_ignore: str | list[str] | None = None,
 		non_null_threshold: float | None = None,
 	) -> pl.LazyFrame | None:
 		"""
@@ -102,7 +101,7 @@ class Cleaner:
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to remove rows from
-		        cols_to_ignore (str | List[str]): columns to not consider when determining relative amount of null values
+		        cols_to_ignore (str | list[str]): columns to not consider when determining relative amount of null values
 		        non_null_threshold (float): percentage of columns that must be non-null in range [0, 1] to keep the row
 
 		Returns:
@@ -143,7 +142,7 @@ class Cleaner:
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to remove duplicates from
-		        cols (str | List[str]): columns to check for duplicates
+		        cols (str | list[str]): columns to check for duplicates
 
 		Returns:
 		        pl.LazyFrame: the modified LazyFrame
@@ -176,7 +175,7 @@ class Cleaner:
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to fill nulls in
-		        cols (str | List[str]): columns to fill nulls in
+		        cols (str | list[str]): columns to fill nulls in
 		        fill_strategy (str): strategy to use to fill nulls. Options are 'mean', 'median', 'mode', 'zero', 'ffill', 'bfill', or a constant value
 
 		Returns:
@@ -232,7 +231,7 @@ class Cleaner:
 	@abstractmethod
 	def custom_fill_nulls(
 		lf: pl.LazyFrame,
-		cols: str | List[str] | None = None,
+		cols: str | list[str] | None = None,
 		fill_strategy: str | None = None,
 	) -> pl.LazyFrame:
 		"""
@@ -240,7 +239,7 @@ class Cleaner:
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to fill nulls in
-		        cols (str | List[str]): columns to fill nulls in
+		        cols (str | list[str]): columns to fill nulls in
 		        fill_strategy (str): strategy to use to fill nulls. Options are 'mean', 'median', 'mode', 'zero', 'ffill', 'bfill', or a constant value
 
 		Returns:
@@ -253,14 +252,14 @@ class Cleaner:
 
 	@staticmethod
 	def sort(
-		lf: pl.LazyFrame, cols: str | List[str] | None = None, descending: bool = False
+		lf: pl.LazyFrame, cols: str | list[str] | None = None, descending: bool = False
 	) -> pl.LazyFrame:
 		"""
 		Sorts the LazyFrame by the given columns.
 
 		Args:
 		        lf (pl.LazyFrame): LazyFrame to sort
-		        cols (str | List[str] | None): columns to sort by; if None but descending is not None, will sort by all columns
+		        cols (str | list[str] | None): columns to sort by; if None but descending is not None, will sort by all columns
 		        descending (bool): whether to sort in descending order; if None and cols is None, will not sort
 
 		Returns:

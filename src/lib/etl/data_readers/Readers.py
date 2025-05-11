@@ -7,13 +7,13 @@ from src.lib.helpers.Renamer import Renamer
 
 
 class Reader(ABC):
-	def __init__(self, path: str, schema: List[Tuple[str, str]] = None):
+	def __init__(self, path: str, schema: list[tuple[str, str]] | None = None):
 		"""
 		Initializes the Reader class with the given path.
 
 		Args:
 		        path (str): The path to the data file.
-		        schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
+		        schema (list[tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
 		"""
 
 		rn = Renamer()
@@ -47,7 +47,7 @@ class Reader(ABC):
 			raise RuntimeError(f"Failed to read file: {e}") from e
 
 	@abstractmethod
-	def read_() -> pl.LazyFrame:
+	def read_(self, path: str, schema: list[tuple[str, str]] | None) -> pl.LazyFrame:
 		"""
 		Reads data from the given path and returns it as a list of dictionaries.
 
@@ -62,12 +62,12 @@ class Reader(ABC):
 
 
 class CSVReader(Reader):
-	def __init__(self, path: str, schema: List[Tuple[str, str]] = None):
+	def __init__(self, path: str, schema: list[tuple[str, str]] | None = None):
 		"""
 		Initializes the CSVReader class with the given path.
 		Args:
 		        path (str): The path to the CSV file.
-		        schema (List[Tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
+		        schema (list[tuple[str, str]], optional): The schema to enforce if any. If not provided, the schema will be inferred from the file.
 		"""
 		super().__init__(path, schema)
 

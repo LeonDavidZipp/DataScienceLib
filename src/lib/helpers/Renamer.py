@@ -1,5 +1,4 @@
 from functools import lru_cache
-from typing import Dict
 
 
 class Renamer:
@@ -8,7 +7,7 @@ class Renamer:
 	Also handles duplicate names by appending a number to the end of the name.
 	"""
 
-	def __init__(self, rename_dict: Dict[str, str] | None = None):
+	def __init__(self, rename_dict: dict[str, str] | None = None):
 		default_rename_dict = {
 			"!": "",
 			'"': "",

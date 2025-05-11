@@ -6,7 +6,6 @@ import os
 
 import polars as pl
 import sqlalchemy
-from typing import Dict
 
 
 class BaseETLPipeline:
@@ -18,7 +17,7 @@ class ETLHandler(ev.FileSystemEventHandler):
 	def __init__(
 		self,
 		engine: sqlalchemy.engine.Engine,
-		ending_to_schema_mapping: Dict[str, str] = None,
+		ending_to_schema_mapping: dict[str, str] | None = None,
 		non_null_threshold: float | None = None,
 		null_fill_strategy: str | None = None,
 		descending: bool | None = None,
