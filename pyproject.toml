@@ -1,5 +1,5 @@
 [project]
-name = "DataScienceLib"
+name = "data_science_lib"
 version = "0.1.0"
 description = "lzipp's personal data science library including helpful functions for data analysis, data visualization, and machine learning."
 readme = "README.md"
