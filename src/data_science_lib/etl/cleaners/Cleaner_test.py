@@ -1,7 +1,7 @@
 import polars as pl
 import polars.testing as pt
 import unittest
-from src.lib.etl.cleaners.Cleaner import Cleaner
+from src.data_science_lib.etl.cleaners.Cleaner import Cleaner
 
 
 class TestCleaner(unittest.TestCase):

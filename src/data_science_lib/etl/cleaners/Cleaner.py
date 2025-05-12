@@ -1,6 +1,6 @@
 import polars as pl
 import polars.selectors as cs
-from src.lib.helpers.Renamer import Renamer
+from src.data_science_lib.helpers.Renamer import Renamer
 from abc import abstractmethod
 
 

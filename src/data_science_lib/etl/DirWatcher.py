@@ -1,5 +1,5 @@
-from src.lib.etl.data_readers.Readers import CSVReader
-from src.lib.etl.cleaners.Cleaner import Cleaner
+from src.data_science_lib.etl.data_readers.Readers import CSVReader
+from src.data_science_lib.etl.cleaners.Cleaner import Cleaner
 import watchdog.observers as obs
 import watchdog.events as ev
 import os

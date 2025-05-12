@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from src.lib.transformers.transposing.TransposerNDim import TransposerNDim
+from src.data_science_lib.transformers.transposing.TransposerNDim import TransposerNDim
 
 
 class TestTransposerNDim(unittest.TestCase):

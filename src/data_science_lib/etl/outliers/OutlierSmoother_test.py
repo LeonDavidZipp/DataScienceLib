@@ -1,7 +1,7 @@
 import unittest
 import polars as pl
 import polars.testing as pl_testing
-from src.lib.etl.outliers.OutlierSmoother import OutlierSmoother
+from src.data_science_lib.etl.outliers.OutlierSmoother import OutlierSmoother
 
 
 class TestOutlierSmoother(unittest.TestCase):

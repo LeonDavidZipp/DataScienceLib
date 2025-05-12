@@ -1,8 +1,8 @@
 import polars as pl
 import polars.selectors as cs
 from typing import Literal
-from src.lib.transformers.time_series.casters import ForeCaster, BackCaster
-from src.lib.transformers.time_series.fillers import MultiTimeSeriesGapFiller
+from src.data_science_lib.transformers.time_series.casters import ForeCaster, BackCaster
+from src.data_science_lib.transformers.time_series.fillers import MultiTimeSeriesGapFiller
 
 
 class NumericalTimeSeriesExtender:
