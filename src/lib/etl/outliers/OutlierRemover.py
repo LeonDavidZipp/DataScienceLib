@@ -11,7 +11,7 @@ class OutlierRemover:
 	@staticmethod
 	def remove_outliers(
 		X: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray,
-		y: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray| None = None,
+		y: pl.DataFrame | pl.LazyFrame | pd.DataFrame | np.ndarray | None = None,
 		y_count: int = 1,
 		threshold: float = 3.0,
 	) -> tuple[

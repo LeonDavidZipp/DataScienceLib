@@ -1,7 +1,6 @@
 import polars as pl
 from abc import ABC, abstractmethod
 from src.lib.etl.pipelines.BaseDataSource import BaseDataSource
-from src.lib.etl.cleaners.Cleaner import Cleaner
 
 
 class BaseETLPipeline(ABC):

@@ -59,7 +59,7 @@ class CleanerPipeline(BaseETLPipeline):
 		return super().extract_(src)
 
 	def transform_(self, lf: pl.LazyFrame):
-		lf = Cleaner.adjust_column_names(lf)
+		lf = Cleaner.format_column_names(lf)
 		lf = Cleaner.remove_nulls(lf, self.non_null_threshold)
 		lf = Cleaner.remove_duplicates(lf)
 		lf = Cleaner.fill_nulls(

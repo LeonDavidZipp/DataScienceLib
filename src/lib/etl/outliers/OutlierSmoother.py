@@ -13,11 +13,11 @@ class OutlierSmoother:
 		self.max_zscore = max_zscore
 
 	def smooth_col_(self, X: pl.Series) -> pl.Series:
-		max_val = X.mean() + self.max_zscore * X.std() # type: ignore
-		min_val = X.mean() - self.max_zscore * X.std() # type: ignore
+		max_val = X.mean() + self.max_zscore * X.std()  # type: ignore
+		min_val = X.mean() - self.max_zscore * X.std()  # type: ignore
 		if X.dtype.is_integer():
-			max_val = int(max_val) # type: ignore
-			min_val = int(min_val) # type: ignore
+			max_val = int(max_val)  # type: ignore
+			min_val = int(min_val)  # type: ignore
 		print(f"max_val: {max_val}, min_val: {min_val}")
 		res = (
 			pl.DataFrame(X)

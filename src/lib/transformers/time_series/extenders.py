@@ -224,7 +224,7 @@ class MultiTimeSeriesExtender:
 		cols = X.columns
 
 		nts = NumericalTimeSeriesExtender(
-			self.period, # type: ignore
+			self.period,  # type: ignore
 			self.steps,
 			self.only_return_extended,  # type: ignore
 		)  # type: ignore
@@ -284,7 +284,9 @@ class MultiTimeSeriesExtender:
 		cols = X.columns
 
 		nts = NumericalTimeSeriesExtender(
-			self.period, self.steps, self.only_return_extended # type: ignore
+			self.period,
+			self.steps,
+			self.only_return_extended,  # type: ignore
 		)  # type: ignore
 		dts = DateTimeSeriesExtender(self.period, self.steps, self.only_return_extended)  # type: ignore
 		nnts = NonNumericalTimeSeriesExtender(
