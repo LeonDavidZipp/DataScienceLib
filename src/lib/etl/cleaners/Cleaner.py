@@ -43,7 +43,7 @@ class Cleaner:
 			raise ValueError(f"Error checking columns: {e}")
 
 	@staticmethod
-	def adjust_column_names(lf: pl.LazyFrame) -> pl.LazyFrame:
+	def format_column_names(lf: pl.LazyFrame) -> pl.LazyFrame:
 		"""
 		Adjusts the column names to be valid python variable names.
 
@@ -57,6 +57,26 @@ class Cleaner:
 		try:
 			rn = Renamer()
 			return lf.select(pl.all().name.map(rn.rename))
+		except Exception as e:
+			raise ValueError(f"Error renaming columns: {e}")
+
+	@staticmethod
+	def rename_columns(
+		lf: pl.LazyFrame, names_to_new_names: dict[str, str]
+	) -> pl.LazyFrame:
+		"""
+		Renames the columns in the LazyFrame.
+
+		Args:
+		        lf (pl.LazyFrame): LazyFrame to rename columns of
+		        names_to_new_names (dict[str, str]): dictionary mapping old column names to new column names
+
+		Returns:
+		        pl.LazyFrame: the modified LazyFrame
+		"""
+
+		try:
+			return lf.rename(names_to_new_names, strict=False)
 		except Exception as e:
 			raise ValueError(f"Error renaming columns: {e}")
 

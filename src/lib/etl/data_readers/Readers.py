@@ -2,7 +2,6 @@ import polars as pl
 import os
 import csv
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 from src.lib.helpers.Renamer import Renamer
 
 

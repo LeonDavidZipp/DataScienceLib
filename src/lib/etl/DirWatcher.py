@@ -42,7 +42,7 @@ class ETLHandler(ev.FileSystemEventHandler):
 			return CSVReader(path).read()
 
 	def transform(self, lf: pl.LazyFrame) -> pl.LazyFrame:
-		lf = Cleaner.adjust_column_names(lf)
+		lf = Cleaner.format_column_names(lf)
 		lf = Cleaner.remove_nulls(lf, self.non_null_threshold)
 		lf = Cleaner.remove_duplicates(lf)
 		lf = Cleaner.fill_nulls(lf, self.null_fill_strategy)

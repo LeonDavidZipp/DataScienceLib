@@ -34,12 +34,12 @@ class TestCleaner(unittest.TestCase):
 			outp = self.cleaner.cols_from_provided_cols_(self.lf, inp)
 			self.assertEqual(outp, expected)
 
-	def test_adjust_column_names(self):
+	def test_format_column_names(self):
 		"""
-		Test the adjust_column_names method of the Cleaner class.
+		Test the format_column_names method of the Cleaner class.
 		"""
 		expected = ["apercenta", "b", "c", "d"]
-		outp = self.cleaner.adjust_column_names(self.lf).collect_schema().names()
+		outp = self.cleaner.format_column_names(self.lf).collect_schema().names()
 		self.assertEqual(outp, expected)
 
 	def test_drop(self):
