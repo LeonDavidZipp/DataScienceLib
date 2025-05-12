@@ -1,18 +1,22 @@
 [project]
-name = "lib"
+name = "DataScienceLib"
 version = "0.1.0"
-description = "Add your description here"
+description = "lzipp's personal data science library including helpful functions for data analysis, data visualization, and machine learning."
 readme = "README.md"
 authors = [
-    { name = "Leon David Zipp", email = "leondavidzipp@gmx.de" }
+    { name = "lzipp", email = "leondavidzipp@proton.me" }
 ]
 requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Private :: Do Not Upload"
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
 dependencies = [
-    "ipykernel>=6.29.5",
-    "jupyter>=1.1.1",
     "matplotlib>=3.9.4",
     "multipledispatch>=1.0.0",
-    "notebook>=7.4.0",
     "numpy>=2.0.2",
     "pandas>=2.2.3",
     "pip>=25.0.1",
@@ -50,4 +54,7 @@ docstring-code-line-length = 88
 [dependency-groups]
 dev = [
     "ruff>=0.11.6",
+    "ipykernel>=6.29.5",
+    "jupyter>=1.1.1",
+    "notebook>=7.4.0",
 ]
