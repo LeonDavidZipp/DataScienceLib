@@ -81,6 +81,32 @@ class Cleaner:
 			raise ValueError(f"Error renaming columns: {e}")
 
 	@staticmethod
+	def reorder_columns(
+		lf: pl.LazyFrame, column_names: list[str] | None = None
+	) -> pl.LazyFrame:
+		"""
+		Reorders the columns in the LazyFrame.
+
+		Args:
+		        lf (pl.LazyFrame): LazyFrame to reorder columns of
+		        column_names (list[str]): list of new column names
+
+		Returns:
+		        pl.LazyFrame: the modified LazyFrame
+		"""
+
+		if column_names is None:
+			return lf
+
+		try:
+			return lf.select(
+				cs.by_name(column_names),
+				~cs.by_name(column_names),
+			)
+		except Exception as e:
+			raise ValueError(f"Error reordering columns: {e}")
+
+	@staticmethod
 	def drop(lf: pl.LazyFrame, cols: str | list[str] | None = None) -> pl.LazyFrame:
 		"""
 		Drops the given columns from the LazyFrame.
