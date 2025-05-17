@@ -1,6 +1,9 @@
 import polars as pl
 from src.data_science_lib.etl.cleaners.Cleaner import Cleaner
-from src.data_science_lib.etl.pipelines.BaseETLPipeline import BaseETLPipeline, BaseDataSource
+from src.data_science_lib.etl.pipelines.BaseETLPipeline import (
+	BaseETLPipeline,
+	BaseDataSource,
+)
 
 
 class CleanerPipeline(BaseETLPipeline):

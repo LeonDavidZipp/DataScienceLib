@@ -43,7 +43,7 @@ class Renamer:
 			"~": "tilde",
 		}
 		self.rename_dict = default_rename_dict if rename_dict is None else rename_dict
-		self.counts = dict()
+		self.counts: dict[str, int] = {}
 
 	def rename(self, name: str) -> str:
 		"""
@@ -65,12 +65,12 @@ class Renamer:
 
 	@lru_cache(maxsize=1024)
 	def rename_inner_(self, name: str) -> str:
-		if name is None:
+		if not name:
 			return "unnamed"
 
 		name = name.translate(str.maketrans(self.rename_dict))
 		name = name.strip("_").lower()
-		if name is None or name == "":
+		if not name:
 			return "unnamed"
 		else:
 			return name

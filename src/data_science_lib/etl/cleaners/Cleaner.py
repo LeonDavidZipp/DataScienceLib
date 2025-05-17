@@ -1,6 +1,6 @@
 import polars as pl
 import polars.selectors as cs
-from src.data_science_lib.helpers.Renamer import Renamer
+from ...helpers.renamer import Renamer
 from abc import abstractmethod
 
 
@@ -124,7 +124,7 @@ class Cleaner:
 
 		try:
 			cols = Cleaner.cols_from_provided_cols_(lf, cols)
-			if cols is None:
+			if not cols:
 				return lf
 
 			if len(cols) <= 0:

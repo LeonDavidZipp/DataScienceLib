@@ -13,7 +13,7 @@ class ScalerNDim(sk.base.BaseEstimator, sk.base.TransformerMixin):
 		self.divisor = divisor
 		self.prevent_div_by_zero_val = prevent_div_by_zero_val
 
-	def fit(self, X: np.ndarray, y=None):
+	def fit(self, X: np.ndarray, y=None): # type: ignore
 		"""
 		Fit the scaler to the data.
 
@@ -32,7 +32,7 @@ class ScalerNDim(sk.base.BaseEstimator, sk.base.TransformerMixin):
 			self.divisor = max_val
 		return self
 
-	def transform(self, X: np.ndarray, y=None):
+	def transform(self, X: np.ndarray, y=None): # type: ignore
 		"""
 		Transform the data using the fitted scaler.
 
@@ -46,7 +46,7 @@ class ScalerNDim(sk.base.BaseEstimator, sk.base.TransformerMixin):
 
 		return X / self.divisor
 
-	def fit_transform(self, X: np.ndarray, y=None):
+	def fit_transform(self, X: np.ndarray, y=None): # type: ignore
 		"""
 		Fit the scaler to the data and then transform it.
 		Args:
