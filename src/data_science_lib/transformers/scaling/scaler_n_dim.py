@@ -15,7 +15,7 @@ class ScalerNDim(BaseEstimator, TransformerMixin):
 		self.divisor = divisor
 		self.prevent_div_by_zero_val = prevent_div_by_zero_val
 
-	def fit(self, X: NDArray[Any], y=None) -> "ScalerNDim": # type: ignore
+	def fit(self, X: NDArray[Any], y=None) -> "ScalerNDim":  # type: ignore
 		"""
 		Fit the scaler to the data.
 
@@ -48,7 +48,7 @@ class ScalerNDim(BaseEstimator, TransformerMixin):
 
 		return X / self.divisor
 
-	def fit_transform(self, X: NDArray[Any], y=None) -> NDArray[Any]: # type: ignore
+	def fit_transform(self, X: NDArray[Any], y=None) -> NDArray[Any]:  # type: ignore
 		"""
 		Fit the scaler to the data and then transform it.
 		Args:
@@ -58,5 +58,5 @@ class ScalerNDim(BaseEstimator, TransformerMixin):
 			np.ndarray: Transformed data.
 		"""
 
-		self.fit(X) # type: ignore
-		return self.transform(X) # type: ignore
+		self.fit(X)  # type: ignore
+		return self.transform(X)  # type: ignore
