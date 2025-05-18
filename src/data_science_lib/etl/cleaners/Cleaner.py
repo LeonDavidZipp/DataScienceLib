@@ -1,7 +1,6 @@
 import polars as pl
 import polars.selectors as cs
 from ...helpers.renamer import Renamer
-from abc import abstractmethod
 
 
 class Cleaner:
@@ -163,7 +162,7 @@ class Cleaner:
 			if cols_to_ignore is None:
 				cols_to_ignore = []
 			cols = Cleaner.cols_from_provided_cols_(lf, cols_to_ignore)
-			if cols is None:
+			if not cols:
 				return lf
 
 			if len(cols) <= 0:
@@ -274,29 +273,6 @@ class Cleaner:
 			raise ValueError(f"Error filling nulls: {e}")
 
 	@staticmethod
-	@abstractmethod
-	def custom_fill_nulls(
-		lf: pl.LazyFrame,
-		cols: str | list[str] | None = None,
-		fill_strategy: str | None = None,
-	) -> pl.LazyFrame:
-		"""
-		Fills null values in the given columns with custom strategies.
-
-		Args:
-		        lf (pl.LazyFrame): LazyFrame to fill nulls in
-		        cols (str | list[str]): columns to fill nulls in
-		        fill_strategy (str): strategy to use to fill nulls. Options are 'mean', 'median', 'mode', 'zero', 'ffill', 'bfill', or a constant value
-
-		Returns:
-		        pl.LazyFrame: the modified LazyFrame
-		"""
-
-		raise NotImplementedError(
-			"custom_fill_nulls must be implemented by the child class"
-		)
-
-	@staticmethod
 	def sort(
 		lf: pl.LazyFrame, cols: str | list[str] | None = None, descending: bool = False
 	) -> pl.LazyFrame:
@@ -312,7 +288,7 @@ class Cleaner:
 		        pl.LazyFrame: the modified LazyFrame
 		"""
 
-		if cols is None and descending is None:
+		if cols is None:
 			return lf
 
 		try:

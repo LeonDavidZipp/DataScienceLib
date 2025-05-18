@@ -2,7 +2,7 @@ import polars as pl
 import os
 import csv
 from abc import ABC, abstractmethod
-from src.data_science_lib.helpers.Renamer import Renamer
+from ...helpers.renamer import Renamer
 
 
 class Reader(ABC):
