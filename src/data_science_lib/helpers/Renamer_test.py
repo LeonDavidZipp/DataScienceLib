@@ -1,5 +1,5 @@
 import unittest
-from helpers.Renamer import Renamer
+from .renamer import Renamer
 
 
 class TestRenamer(unittest.TestCase):

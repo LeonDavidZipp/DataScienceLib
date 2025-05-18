@@ -45,7 +45,7 @@ class Renamer:
 		self.rename_dict = default_rename_dict if rename_dict is None else rename_dict
 		self.counts: dict[str, int] = {}
 
-	def rename(self, name: str) -> str:
+	def rename(self, name: str | None) -> str:
 		"""
 		Renames the given name to a valid python variable name by removing special
 		characters and replacing spaces with underscores.
@@ -64,7 +64,7 @@ class Renamer:
 		return name
 
 	@lru_cache(maxsize=1024)
-	def rename_inner_(self, name: str) -> str:
+	def rename_inner_(self, name: str | None) -> str:
 		if not name:
 			return "unnamed"
 
