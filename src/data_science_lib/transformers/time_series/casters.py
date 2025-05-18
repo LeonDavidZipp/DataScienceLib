@@ -1,12 +1,10 @@
 from typing import Literal
 import numpy as np
-from typing import override
-import statsmodels
+from typing import override, Any
+from numpy.typing import NDArray
+import statsmodels  # type: ignore
 import abc
 import sklearn.base as skbase
-
-import statsmodels.tsa
-import statsmodels.tsa.seasonal
 
 
 class BaseCaster(abc.ABC, skbase.TransformerMixin):
@@ -29,12 +27,12 @@ class BaseCaster(abc.ABC, skbase.TransformerMixin):
 		self.trends = None
 		self.cycles = None
 
-	def fit(self, X: np.ndarray, y=None) -> "BaseCaster":
+	def fit(self, X: NDArray[Any], y=None) -> "BaseCaster":  # type: ignore
 		"""
 		Removes outliers based on Z-score. NOT meant to be part of a pipeline, but applied to the data beforehand.
 
 		Args:
-		        X (np.ndarray): (multiple) time series data.
+		        X (NDArray[Any]): (multiple) time series data.
 		        y: Does nothing, but is required for sklearn compatibility.
 
 		Returns:
@@ -42,52 +40,54 @@ class BaseCaster(abc.ABC, skbase.TransformerMixin):
 		"""
 
 		if X.ndim == 1:
-			X = X.reshape(-1, 1)
+			x_new = X.reshape(-1, 1)
+		else:
+			x_new = X
 
-		self.trends = np.zeros((X.shape[1],))
-		self.cycles = np.zeros((X.shape[1], self.period))
-		for i in range(X.shape[1]):
-			stl_res = statsmodels.tsa.seasonal.STL(
-				endog=X, period=self.period, robust=True
+		self.trends = np.zeros((x_new.shape[1],))
+		self.cycles = np.zeros((x_new.shape[1], self.period))
+		for i in range(x_new.shape[1]):
+			stl_res = statsmodels.tsa.seasonal.STL(  # type: ignore
+				endog=x_new, period=self.period, robust=True
 			).fit()
 			self.trends[i] = (
-				stl_res.trend[0] - stl_res.trend[-1]
-			) / stl_res.trend.shape[0]
+				stl_res.trend[0] - stl_res.trend[-1]  # type: ignore
+			) / stl_res.trend.shape[0]  # type: ignore
 			self.cycles[i] = np.array(
-				[stl_res.seasonal[j :: j + 1].mean() for j in range(self.period)]
+				[stl_res.seasonal[j :: j + 1].mean() for j in range(self.period)]  # type: ignore
 			)
 
 		self.is_fitted = True
 		return self
 
 	@abc.abstractmethod
-	def transform(self, X: np.ndarray) -> np.ndarray:
+	def transform(self, X: NDArray[Any]) -> NDArray[Any]:
 		"""
 		Transforms the input data.
 
 		Args:
-		        X (np.ndarray): (multiple) time series data.
+		        X (NDArray[Any]): (multiple) time series data.
 
 		Returns:
-		        np.ndarray: Transformed data.
+		        NDArray[Any]: Transformed data.
 		"""
 
 		raise NotImplementedError("Subclasses should implement this method")
 
 	@override
-	def fit_transform(self, X: np.ndarray, y=None, **fit_params) -> np.ndarray:  # type: ignore
+	def fit_transform(self, X: NDArray[Any], y=None, **fit_params) -> NDArray[Any]:  # type: ignore
 		"""
 		Fits the model to the data and then transforms it.
 
 		Args:
-		        X (np.ndarray): (multiple) time series data.
+		        X (NDArray[Any]): (multiple) time series data.
 		        y: Does nothing, but is required for sklearn compatibility.
 
 		Returns:
-		        np.ndarray: Transformed data.
+		        NDArray[Any]: Transformed data.
 		"""
 
-		self.fit(X)
+		self.fit(X)  # type: ignore
 		return self.transform(X)
 
 
@@ -101,15 +101,15 @@ class ForeCaster(BaseCaster):
 		super().__init__(period, steps, only_return_extended)
 
 	@override
-	def transform(self, X: np.ndarray) -> np.ndarray:
+	def transform(self, X: NDArray[Any]) -> NDArray[Any]:
 		"""
 		Transforms the input data.
 
 		Args:
-		        X (np.ndarray): (multiple) time series data.
+		        X (NDArray[Any]): (multiple) time series data.
 
 		Returns:
-		        np.ndarray: Transformed data.
+		        NDArray[Any]: Transformed data.
 		"""
 
 		if not self.is_fitted or self.trends is None or self.cycles is None:
@@ -118,28 +118,30 @@ class ForeCaster(BaseCaster):
 			)
 
 		if X.ndim == 1:
-			X = X.reshape(-1, 1)
+			x_new = X.reshape(-1, 1)
+		else:
+			x_new = X
 
-		X_ext = np.array(
+		x_ext = np.array(
 			[
 				[
 					i * self.trends[j] + self.cycles[j, i % self.period]
-					for j in range(X.shape[1])
+					for j in range(x_new.shape[1])
 				]
 				for i in range(self.steps)
 			]
 		)
 
 		if self.only_return_extended:
-			X = X_ext
+			x_new = x_ext
 		else:
-			X = np.concat([X, X_ext], axis=0)
+			x_new = np.concat([x_new, x_ext], axis=0)
 
-		if X.ndim == 2 and X.shape[1] == 1:
-			return X.reshape(
+		if x_new.ndim == 2 and x_new.shape[1] == 1:
+			return x_new.reshape(
 				-1,
 			)
-		return X
+		return x_new
 
 
 class BackCaster(BaseCaster):
@@ -152,15 +154,15 @@ class BackCaster(BaseCaster):
 		super().__init__(period, steps, only_return_extended)
 
 	@override
-	def transform(self, X: np.ndarray) -> np.ndarray:
+	def transform(self, X: NDArray[Any]) -> NDArray[Any]:
 		"""
 		Transforms the input data.
 
 		Args:
-		        X (np.ndarray): (multiple) time series data.
+		        X (NDArray[Any]): (multiple) time series data.
 
 		Returns:
-		        np.ndarray: Transformed data.
+		        NDArray[Any]: Transformed data.
 		"""
 
 		if not self.is_fitted or self.trends is None or self.cycles is None:
@@ -169,26 +171,28 @@ class BackCaster(BaseCaster):
 			)
 
 		if X.ndim == 1:
-			X = X.reshape(-1, 1)
+			x_new = X.reshape(-1, 1)
+		else:
+			x_new = X
 
 		# single series:
-		X_ext = np.array(
+		x_ext = np.array(
 			[
 				[
 					(self.steps - i) * self.trends[j] + self.cycles[j, i % self.period]
-					for j in range(X.shape[1])
+					for j in range(x_new.shape[1])
 				]
 				for i in range(self.steps)
 			]
 		)
 
 		if self.only_return_extended:
-			X = X_ext
+			x_new = x_ext
 		else:
-			X = np.concat([X_ext, X], axis=0)
+			x_new = np.concat([x_ext, x_new], axis=0)
 
-		if X.ndim == 2 and X.shape[1] == 1:
-			return X.reshape(
+		if x_new.ndim == 2 and x_new.shape[1] == 1:
+			return x_new.reshape(
 				-1,
 			)
-		return X
+		return x_new

@@ -1,8 +1,10 @@
 import polars as pl
 import polars.selectors as cs
 from typing import Literal
-from src.data_science_lib.transformers.time_series.casters import ForeCaster, BackCaster
-from src.data_science_lib.transformers.time_series.fillers import MultiTimeSeriesGapFiller
+from .casters import ForeCaster, BackCaster
+from .fillers import (
+	MultiTimeSeriesGapFiller,
+)
 
 
 class NumericalTimeSeriesExtender:
@@ -59,7 +61,6 @@ class NumericalTimeSeriesExtender:
 		return pl.Series(data, nan_to_null=True)
 
 
-# TODO: debug
 class DateTimeSeriesExtender:
 	def __init__(
 		self,
@@ -213,7 +214,7 @@ class MultiTimeSeriesExtender:
 			pl.DataFrame: Extended time series data.
 		"""
 
-		X = MultiTimeSeriesGapFiller(
+		x_new = MultiTimeSeriesGapFiller(
 			self.binary_value,  # type: ignore
 			self.boolean_value,  # type: ignore
 			self.duration_strategy,  # type: ignore
@@ -221,7 +222,7 @@ class MultiTimeSeriesExtender:
 			self.time_strategy,  # type: ignore
 		).fill(X, date_col)
 
-		cols = X.columns
+		cols = x_new.columns
 
 		nts = NumericalTimeSeriesExtender(
 			self.period,  # type: ignore
@@ -235,27 +236,27 @@ class MultiTimeSeriesExtender:
 		return (
 			pl.DataFrame()
 			.with_columns(
-				X.select(cs.date().map_batches(dts.forward)),
+				x_new.select(cs.date().map_batches(dts.forward)),
 			)
 			.with_columns(
-				X.select(cs.numeric().map_batches(nts.forward)),
+				x_new.select(cs.numeric().map_batches(nts.forward)),
 			)
 			.with_columns(
-				X.select(cs.binary().map_batches(nnts.forward)),
+				x_new.select(cs.binary().map_batches(nnts.forward)),
 			)
 			.with_columns(
-				X.select(cs.boolean().map_batches(nnts.forward)),
+				x_new.select(cs.boolean().map_batches(nnts.forward)),
 			)
 			.with_columns(
-				X.select(cs.duration().map_batches(nnts2.forward)),
+				x_new.select(cs.duration().map_batches(nnts2.forward)),
 			)
 			.with_columns(
-				X.select(
+				x_new.select(
 					cs.string(include_categorical=True).map_batches(nnts3.forward)
 				),
 			)
 			.with_columns(
-				X.select(cs.time().map_batches(nnts2.forward)),
+				x_new.select(cs.time().map_batches(nnts2.forward)),
 			)
 			.select(cols)
 		)
@@ -273,7 +274,7 @@ class MultiTimeSeriesExtender:
 		"""
 
 		# interpolate dataframe
-		X = MultiTimeSeriesGapFiller(
+		x_new = MultiTimeSeriesGapFiller(
 			self.binary_value,  # type: ignore
 			self.boolean_value,  # type: ignore
 			self.duration_strategy,  # type: ignore
@@ -281,12 +282,12 @@ class MultiTimeSeriesExtender:
 			self.time_strategy,  # type: ignore
 		).fill(X, date_col)
 
-		cols = X.columns
+		cols = x_new.columns
 
 		nts = NumericalTimeSeriesExtender(
-			self.period,
+			self.period,  # type: ignore
 			self.steps,
-			self.only_return_extended,  # type: ignore
+			self.only_return_extended,
 		)  # type: ignore
 		dts = DateTimeSeriesExtender(self.period, self.steps, self.only_return_extended)  # type: ignore
 		nnts = NonNumericalTimeSeriesExtender(
@@ -298,33 +299,33 @@ class MultiTimeSeriesExtender:
 		nnts3 = NonNumericalTimeSeriesExtender(
 			"backward", self.steps, self.only_return_extended
 		)
-		print(f"df shape before: {X.shape}")
-		X = (
+		print(f"df shape before: {x_new.shape}")
+		x_new = (
 			pl.DataFrame()
 			.with_columns(
-				X.select(cs.date().map_batches(dts.backward)),
+				x_new.select(cs.date().map_batches(dts.backward)),
 			)
 			.with_columns(
-				X.select(cs.numeric().map_batches(nts.backward)),
+				x_new.select(cs.numeric().map_batches(nts.backward)),
 			)
 			.with_columns(
-				X.select(cs.binary().map_batches(nnts.backward)),
+				x_new.select(cs.binary().map_batches(nnts.backward)),
 			)
 			.with_columns(
-				X.select(cs.boolean().map_batches(nnts.backward)),
+				x_new.select(cs.boolean().map_batches(nnts.backward)),
 			)
 			.with_columns(
-				X.select(cs.duration().map_batches(nnts2.backward)),
+				x_new.select(cs.duration().map_batches(nnts2.backward)),
 			)
 			.with_columns(
-				X.select(
+				x_new.select(
 					cs.string(include_categorical=True).map_batches(nnts3.backward)
 				),
 			)
 			.with_columns(
-				X.select(cs.time().map_batches(nnts2.backward)),
+				x_new.select(cs.time().map_batches(nnts2.backward)),
 			)
 			.select(cols)
 		)
-		print(f"df shape after: {X.shape}")
-		return X
+		print(f"df shape after: {x_new.shape}")
+		return x_new
