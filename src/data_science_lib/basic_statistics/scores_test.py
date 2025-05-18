@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from basic_statistics.scores import Scores
+from .scores import Scores
 import scipy.stats
 
 

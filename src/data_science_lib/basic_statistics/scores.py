@@ -4,7 +4,7 @@ import math
 
 class Scores:
 	@staticmethod
-	def variance(X: np.ndarray):
+	def variance(X: np.ndarray) -> float:
 		mean = X.mean()
 		n = X.shape[0]
 		return np.sum((X - mean) ** 2) / n
